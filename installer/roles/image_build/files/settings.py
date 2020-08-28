@@ -1,7 +1,8 @@
 # AWX settings file
 
 import os
-
+import socket
+import uuid
 
 def get_secret():
     if os.path.exists("/etc/tower/SECRET_KEY"):
@@ -25,9 +26,8 @@ ALLOWED_HOSTS = ['*']
 # Container environments don't like chroots
 AWX_PROOT_ENABLED = False
 
-
-CLUSTER_HOST_ID = "awx"
-SYSTEM_UUID = '00000000-0000-0000-0000-000000000000'
+CLUSTER_HOST_ID = os.getenv("CLUSTER_HOST_ID", socket.gethostname())
+SYSTEM_UUID = os.getenv("SYSTEM_UUID", uuid.uuid5(uuid.NAMESPACE_DNS, CLUSTER_HOST_ID))
 
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
